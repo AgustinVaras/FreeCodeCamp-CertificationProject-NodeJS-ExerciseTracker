@@ -6,7 +6,11 @@ require('dotenv').config()
 //MongoDB connection
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, 
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('MongoDB connected succesfully'))
   .catch((err) => console.error('Error connecting to DB: ' + err));
 //-----------------------------------------------------------
