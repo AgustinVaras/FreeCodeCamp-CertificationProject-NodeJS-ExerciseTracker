@@ -23,8 +23,21 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-const User = new mongoose.model('User', UserSchema);
+const ExerciseSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    require: true
+  },
+  description: {
+    type: Text,
+    requiere: true
+  },
+  date: Date,
+});
 
+//Models
+const User = new mongoose.model('User', UserSchema);
+const Exercise = new mongoose.model('Exercise', ExerciseSchema);
 //-----------------------------------------------------------
 
 app.use(cors())
