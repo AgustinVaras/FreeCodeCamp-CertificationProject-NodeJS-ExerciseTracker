@@ -14,6 +14,19 @@ mongoose.connect(process.env.MONGO_URI,
   .then(() => console.log('MongoDB connected succesfully'))
   .catch((err) => console.error('Error connecting to DB: ' + err));
 //-----------------------------------------------------------
+//Schemas
+
+const UserSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    require: true
+  }
+});
+
+const User = new mongoose.model('User', UserSchema);
+
+//-----------------------------------------------------------
+
 app.use(cors())
 app.use(express.static('public'))
 app.get('/', (req, res) => {
