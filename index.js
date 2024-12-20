@@ -80,6 +80,10 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+app.post('/api/users/:_id/exercises', async (req, res) => {
+  
+});
+
 app.get('/api/users', async (req, res) => {
   const usersQuery = await User.find();
   const usersJson = [];
@@ -88,6 +92,8 @@ app.get('/api/users', async (req, res) => {
   });
   res.send(usersJson);
 });
+
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
