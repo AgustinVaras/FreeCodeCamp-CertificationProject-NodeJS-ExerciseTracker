@@ -29,7 +29,7 @@ const ExerciseSchema = new mongoose.Schema({
     require: true
   },
   description: {
-    type: Text,
+    type: String,
     requiere: true
   },
   date: Date,
