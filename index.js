@@ -77,9 +77,16 @@ app.post('/api/users', async (req, res) => {
       });
       res.json({ username: newUser.username, _id: newUser._id });
     }
-    
-
   }
+});
+
+app.get('/api/users', async (req, res) => {
+  const usersQuery = await User.find();
+  const usersJson = [];
+  usersQuery.map((user) => {
+    usersJson.push({username: user.username, _id: user._id});
+  });
+  res.send(usersJson);
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
