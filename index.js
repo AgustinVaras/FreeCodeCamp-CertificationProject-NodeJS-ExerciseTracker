@@ -32,7 +32,16 @@ const ExerciseSchema = new mongoose.Schema({
     type: String,
     requiere: true
   },
+  duration: {
+    type: Number,
+    require: true
+  },
   date: Date,
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    require: true
+   }
 });
 
 //Models
