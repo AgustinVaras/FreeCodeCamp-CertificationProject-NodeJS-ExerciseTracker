@@ -45,10 +45,33 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
+app.use(express.urlencoded({ extended: true }));
 
 
+app.post('/api/users', async (req, res) => {
+  const submitedUsername = req.body.username;
+  // console.log(submitedUsername);
 
+  if (!submitedUsername) {
+    res.json({error: "Submited invalid username"});
+  } else {
+    console.log(submitedUsername);
+    // await User.deleteMany({ username: "avaras" });
+    const existingUser = await User.findOne({ username: submitedUsername }).exec();
+    if ( existingUser ) {
+      res.json( {username: existingUser.username, _id: existingUser._id} );
+    } else {
+      const newUser = new User({username: submitedUsername});
+      // console.log(newUser.username);
+      newUser.save().then( result => {
+        console.log(result);
+      });
+      res.json({ username: newUser.username, _id: newUser._id });
+    }
+    
 
+  }
+});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
