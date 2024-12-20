@@ -82,12 +82,13 @@ app.post('/api/users', async (req, res) => {
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
   let { description, duration, date } = req.body;
+  const _id = req.params._id;
   if( !date ) {
     date = new Date();
   } else {
     date = new Date(date);
   }
-  console.log(description, duration, date);
+  console.log(_id, description, duration, date);
   
 });
 
