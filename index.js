@@ -80,6 +80,47 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+app.post('/api/users/:_id/exercises', async (req, res) => {
+  
+  if ( !req.body.duration || !req.body.description || !req.params._id ) {
+    res.json({error: " Error, need to fill every requiered field "});
+  } else {
+    const { description, duration } = req.body;
+    const date = req.body.date ? new Date(req.body.date) : new Date();
+    
+    // console.log(description, duration, date.toDateString());
+    try {
+      const _id = req.params._id;
+  
+      const { username } = await User.findById(_id, "+username -_id").exec();
+      
+      // console.log(_id, username);     
+      const user = {
+        username: username,
+        description: description,
+        duration: duration,
+        date: date.toDateString(),
+        _id: _id
+      };
+      
+      const exercise = new Exercise({
+        username: username,
+        description: description,
+        duraton: duration,
+        date: date,
+        userId: _id
+      });
+      await exercise.save().then( result => {
+        console.log(result);
+      });
+
+      res.json(user);
+    } catch (err) {
+      res.status(400).send("ID inexistente o no válido");
+    }
+  }  
+});
+
 app.get('/api/users', async (req, res) => {
   const usersQuery = await User.find();
   const usersJson = [];
@@ -88,6 +129,8 @@ app.get('/api/users', async (req, res) => {
   });
   res.send(usersJson);
 });
+
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
