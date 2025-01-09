@@ -134,6 +134,11 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
+  //Retrieving filters
+  const { from, to , limit} = req.query;
+  const fromDate = from ? new Date(from) : null;
+  const toDate = to ? new Date(to) : null;
+  
   //Retrieving _id param
   const searchedId = req.params._id;
   if ( !searchedId ) {
@@ -143,8 +148,17 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   const foundUser = await User.findById(searchedId);
 
   // console.log(foundUser);
-  //Finding exercises by User
-  const exerciseQuery = await Exercise.find({userId: searchedId});
+  //Defining Query
+  const query = {
+    userId: searchedId,
+    ...(fromDate || toDate ? {
+      date: {
+      ...(fromDate ? {$gte: fromDate} : {}),
+      ...(toDate ? {$lte: toDate} : {})
+      }
+    }: {})
+  };
+  const exerciseQuery = await Exercise.find(query);
   
   //Mapping the log
   const log = [];
