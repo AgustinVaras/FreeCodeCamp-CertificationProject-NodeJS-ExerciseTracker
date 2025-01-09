@@ -95,14 +95,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       const { username } = await User.findById(_id, "+username -_id").exec();
       
       // console.log(_id, username);     
-      const user = {
-        username: username,
-        description: description,
-        duration: duration,
-        date: date.toDateString(),
-        _id: _id
-      };
-      
+      //Stored and saved exercise document
       const exercise = new Exercise({
         username: username,
         description: description,
@@ -113,6 +106,16 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       await exercise.save().then( result => {
         console.log(result);
       });
+
+      //format response object
+      const user = {
+        _id: _id,
+        username: username,
+        date: exercise.date.toDateString(),
+        duration: exercise.duration,
+        description: exercise.description,
+      };
+      
 
       res.json(user);
     } catch (err) {
