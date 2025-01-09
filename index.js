@@ -134,10 +134,13 @@ app.get('/api/users', async (req, res) => {
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
-  //Retrieving filters
+  //Retrieving query parameters
   const { from, to , limit} = req.query;
+
+  //Setting my filters acording to query parameters
   const fromDate = from ? new Date(from) : null;
   const toDate = to ? new Date(to) : null;
+  const limiter = limit && Number.isInteger(Number(limit)) ? limit : null;
   
   //Retrieving _id param
   const searchedId = req.params._id;
@@ -158,7 +161,9 @@ app.get('/api/users/:_id/logs', async (req, res) => {
       }
     }: {})
   };
-  const exerciseQuery = await Exercise.find(query);
+
+  //Executing query
+  const exerciseQuery = await Exercise.find(query).limit(limiter);
   
   //Mapping the log
   const log = [];
