@@ -130,7 +130,40 @@ app.get('/api/users', async (req, res) => {
   res.send(usersJson);
 });
 
+app.get('/api/users/:_id/logs', async (req, res) => {
+  //Retrieving _id param
+  const searchedId = req.params._id;
+  if ( !searchedId ) {
+    return res.status(400).send("ID inexistente o no válido");
+  }
+  //Finding user
+  const foundUser = await User.findById(searchedId);
 
+  // console.log(foundUser);
+  //Finding exercises by User
+  const exerciseQuery = await Exercise.find({userId: searchedId});
+  
+  //Mapping the log
+  const log = [];
+  exerciseQuery.map((exercise) => {
+    log.push({
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date.toDateString()
+    });
+  });
+
+  // console.log(log);
+  //Formating json for response
+  const user = {
+    _id: foundUser._id,
+    username: foundUser.username,
+    count: log.length,
+    log
+  }
+
+  res.json(user);
+});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
